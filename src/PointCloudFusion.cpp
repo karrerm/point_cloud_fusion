@@ -10,11 +10,13 @@
 
 PointCloudFusion::PointCloudFusion() : nodeLocal_("~") {
 	bool loadSuccess = true;
-
+	//-- Load Parameters
 	loadSuccess &= nodeLocal_.getParam("numberOfClouds", numberOfClouds_);
 	loadSuccess &= nodeLocal_.getParam("baseName", baseName_);
 	loadSuccess &= nodeLocal_.getParam("fileLocation", fileLocation_);
 	loadSuccess &= nodeLocal_.getParam("saveName",saveName_);
+	loadSuccess &= nodeLocal_.getParam("maxIterations", maxIterations_);
+	loadSuccess &= nodeLocal_.getParam("maxDistance", maxDistance_);
 
 }
 
@@ -34,12 +36,11 @@ void PointCloudFusion::run() {
 		nodeLocal_.getParam(currentPose,q_temp);
 		Eigen::Quaternionf q(q_temp[3], q_temp[0], q_temp[1],q_temp[2]);
 		std::cout << t << std::endl;
+
 		//-- Recreate File Name
 		std::string currentFile = fileLocation_ + baseName_ + std::to_string(i+1) + ".PTS";
-
 		//-- Read File
 		pointCloudVect_.push_back( pcl::PointCloud<pcl::PointXYZRGB>::Ptr (new pcl::PointCloud<pcl::PointXYZRGB>()));
-
 		std::ifstream pointCloudStream;
 		pointCloudStream.open(currentFile,std::ifstream::in);
 		pointCloudStream >> lines;
@@ -55,8 +56,9 @@ void PointCloudFusion::run() {
 		}
 		std::cout << "Read " << i << " of " << numberOfClouds_ << " point clouds" << std::endl;
 	}
-
+	//-- Do the actual alignment
 	registration();
+	//-- Visualize and store the resulting merged point cloud
 	boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("visualization pc"));
 	viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 15);
 	viewer->initCameraParameters ();
@@ -74,16 +76,16 @@ void PointCloudFusion::run() {
 
 void PointCloudFusion::registration() {
 	//-- Set first Point-Cloud as default
-	std::cout << "Initialize merged point cloud" << std::endl;
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr mergedPointCloud (new pcl::PointCloud<pcl::PointXYZRGB>());
 	for (int i = 0; i < pointCloudVect_[0]->size(); i++) {
 		mergedPointCloud->push_back(pointCloudVect_[0]->points[i]);
 	}
+	//-- Subsequently align the other point clouds
 	for (int i = 1; i < pointCloudVect_.size(); i++) {
 		std::cout << "Align Point cloud #" << i+1 << " of " << pointCloudVect_.size() << std::endl;
 		pcl::IterativeClosestPoint<pcl::PointXYZRGB, pcl::PointXYZRGB> icp;
-		icp.setMaximumIterations (100);
-		icp.setMaxCorrespondenceDistance (0.01);
+		icp.setMaximumIterations (maxIterations_);
+		icp.setMaxCorrespondenceDistance (maxDistance_);
 		icp.setInputCloud(pointCloudVect_[i]);
 		icp.setInputTarget(mergedPointCloud);
 		pcl::PointCloud<pcl::PointXYZRGB>::Ptr Final (new pcl::PointCloud<pcl::PointXYZRGB>());
@@ -92,9 +94,6 @@ void PointCloudFusion::registration() {
 		for (int j = 0; j < Final->size(); j++) {
 			mergedPointCloud->push_back(Final->points[j]);
 		}
-		std::cout << "has converged:" << icp.hasConverged() << " score: " <<
-				icp.getFitnessScore() << std::endl;
-		std::cout << icp.getFinalTransformation() << std::endl;
 	}
 	mergedPointCloud_ = mergedPointCloud;
 

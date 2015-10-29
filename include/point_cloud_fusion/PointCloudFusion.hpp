@@ -34,16 +34,20 @@ public:
 	//-- Constructor and Destructor
 	PointCloudFusion();
 	~PointCloudFusion(){};
-	//-- Start Sending poses
+	//-- Start the alignment
 	void run();
 protected:
 	void registration();
 	int numberOfClouds_;
+	//-- Strings for the different files
 	std::string baseName_, fileLocation_, saveName_;
+	//-- Input and merged output cloud
 	std::vector< pcl::PointCloud<pcl::PointXYZRGB>::Ptr > pointCloudVect_;
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr mergedPointCloud_;
 	//-- ROS Handles
 	ros::NodeHandle node_, nodeLocal_;
+	double maxDistance_;
+	int maxIterations_;
 };
 
 
