@@ -23,6 +23,7 @@ PointCloudCompare::PointCloudCompare() : nodeLocal_("~") {
 	loadSuccess &= nodeLocal_.getParam("maxDistance", maxDistance_);
 	loadSuccess &= nodeLocal_.getParam("filterRadius", filterRadius_);
 	loadSuccess &= nodeLocal_.getParam("filterNeighbours",filterNeighbours_);
+	loadSuccess &= nodeLocal_.getParam("sequentialMeshes",sequentialMeshes_);
 	XmlRpc::XmlRpcValue T_w_rec;
 	loadSuccess &= nodeLocal_.getParam("InitialGuess/T_w_rec", T_w_rec);
 	for (int i = 0; i < 4; i++) {

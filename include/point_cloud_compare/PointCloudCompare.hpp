@@ -74,6 +74,8 @@ protected:
 	int filterNeighbours_;
 	//-- Reorientation of output cloud
 	bool reorientatePC_;
+	//-- Sequential (series of meshes) Meshes
+	bool sequentialMeshes_;
 	Eigen::Matrix4d T_w_rec_;
 	//-- Subsampling parameters
 	double subsampleGroundTruth_;
