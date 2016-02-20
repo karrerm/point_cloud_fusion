@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(point_cloud_fusion)
+project(point_cloud_compare)
 
 add_definitions(-std=c++11)
 
@@ -29,11 +29,11 @@ include_directories(include)
 
 
 # Main nodes
-add_executable(point_cloud_fusion
-			src/main_point_cloud_fusion.cpp
-			src/PointCloudFusion.cpp)
+add_executable(point_cloud_compare
+			src/main_point_cloud_compare.cpp
+			src/PointCloudCompare.cpp)
 
-target_link_libraries(point_cloud_fusion 
+target_link_libraries(point_cloud_compare 
 					${catkin_LIBRARIES}
 					${PCL_LIBRARIES}
 					${OpenCV_LIBS})

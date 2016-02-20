@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+
+   <node  name="point_cloud_compare3" pkg="point_cloud_compare" type="point_cloud_compare" clear_params="true" output="screen">
+   <!-- Run Point Cloud Compare node-->
+
+
+          <rosparam file="$(find point_cloud_compare)/cfg/params.yaml"/>
+          <rosparam file="//home/karrer/FinalDataSet/Aligning/initial_pose_desk.yaml"/>
+
+   </node>
+</launch>

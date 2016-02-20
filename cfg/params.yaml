@@ -1,17 +1,32 @@
 #//////////////////////////////////////////////////////////////////////
 #//////////////////////////////////////////////////////////////////////
-# ------------------ point_cloud_fusion Parameters --------------------
+# ------------------ point_cloud_compare Parameters -------------------
 #//////////////////////////////////////////////////////////////////////
 #//////////////////////////////////////////////////////////////////////
 
+# File Locations and Names
+groundTruthLocation: /home/karrer/FinalDataSet/Aligning
+groundTruthName: Desk
+reconstructionLocation:  /home/karrer/IROS2016/Evaluation/Okvis/Picoflexx/Desk/desk1
+reconstructionName: desk1_1
 
-# Desired framerate
-numberOfClouds : 6
+# Save the point cloud
+saveName: desk_1_1_diff
 
-# FileName and absolute path
-baseName: Scan
-fileLocation: /home/karrer/BoilerScanning/BOILER_8055_1027_144138/Scans/PTS_Data/
+# Subsampling grid-size (no subsampling if set to 0.0)
+subsampleGroundTruth: 0.0
+subsampleReconstruction: 0.0
+
+# Error Resolution (maximal Error to be distinguished)
+largestError: 0.025
 
 # ICP Parameters
-maxIterations: 100
-maxDistance: 0.02
+maxIterations: 15
+maxDistance: 0.1
+
+# Filter Parameters
+filterRadius: 0.02
+filterNeighbours: 15
+
+# Final processing
+reorientatePC: false

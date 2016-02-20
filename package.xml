@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>point_cloud_fusion</name>
+  <name>point_cloud_compare</name>
   <version>0.0.0</version>
-  <description>Package to fuse several point cloud together</description>
+  <description>Package to compare reconstruction with ground truth</description>
   <maintainer email="karrerm@student.ethz.ch">Marco Karrer</maintainer>
   <license>Proprietary</license>
 
